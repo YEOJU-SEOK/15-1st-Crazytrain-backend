@@ -32,6 +32,7 @@ class Signup(View):
         data           = json.loads(request.body)
         REGEX_EMAIL    = '^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         REGEX_PASSWORD = '^[A-Za-z0-9@#$%^&+=]{8,}$'
+        REGEX_NICKNAME = '^[a-zA-Z0-9가-힣]{3,8}$'
 
         try:
             if not re.match(REGEX_EMAIL,data['email']):
@@ -40,7 +41,7 @@ class Signup(View):
             if not re.match(REGEX_PASSWORD,data['password']):
                 return JsonResponse({"message":"INVALID_PW"},status=401)
 
-            if len(data['nickname']) < 2 and len(data['nickname']) > 8:
+            if not re.match(REGEX_NICKNAME,data['nickname']):
                 return JsonResponse({"message":"INVALID_NICKNAME"},status=401)
 
             if User.objects.filter(email=data['email']).exists():
